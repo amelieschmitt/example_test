@@ -36,3 +36,19 @@ jobs:
             docs/build
 
 
+  publish:
+    needs: build
+    # Only publish documentation when merging into `origin/main`.`
+    if: github.repository_owner == 'amelieschmitt'"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download compiled book
+        uses: actions/download-artifact@v2
+        with:
+          name: docs
+          path: build
+      - name: Publish book on github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/html
